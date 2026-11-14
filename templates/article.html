@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<a href="{% url 'articles' %}">← 知識庫</a><article class="card"><h1>{{ object.title }}</h1><p class="muted">更新於 {{ object.updated_at }}</p>{{ object.body|linebreaks }}</article>{% endblock %}
