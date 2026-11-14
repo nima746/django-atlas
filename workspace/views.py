@@ -26,7 +26,7 @@ def signup(request):
 
 @login_required
 def dashboard(request):
-    projects = visible_projects(request.user).annotate(task_count=Count("tasks"), done_count=Count("tasks", filter=Q(tasks__status="done")))
+    projects = visible_projects(request.user).annotate(task_count=Count("tasks", distinct=True), done_count=Count("tasks", filter=Q(tasks__status="done"), distinct=True))
     tasks = Task.objects.filter(project__in=visible_projects(request.user))
     stats = tasks.aggregate(total=Count("id"), done=Count("id", filter=Q(status="done")), doing=Count("id", filter=Q(status="doing")))
     return render(request, "dashboard.html", {"projects": projects, "stats": stats})

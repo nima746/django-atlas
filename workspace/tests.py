@@ -26,6 +26,11 @@ class WorkspaceTests(TestCase):
         self.assertContains(self.client.get("/"), "Private")
         self.assertContains(self.client.get(self.project.get_absolute_url()), "First")
 
+    def test_dashboard_counts_with_multiple_members(self):
+        self.project.members.add(self.other)
+        project = self.client.get("/").context["projects"].get(pk=self.project.pk)
+        self.assertEqual(project.task_count, 1)
+
     def test_outsider_isolation(self):
         self.client.force_login(self.other)
         self.assertNotContains(self.client.get("/"), "Private")
